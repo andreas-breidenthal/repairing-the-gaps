@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Repairing the Gaps — Andreas Breidenthal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Inconsolata:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream:   #f5f0e8;
+      --ivory:   #faf7f2;
+      --ink:     #1c1712;
+      --sepia:   #5c4a32;
+      --rust:    #7a3520;
+      --gold:    #8a6a2a;
+      --muted:   #8a7a68;
+      --rule:    #d4c8b0;
+      --shadow:  rgba(28,23,18,0.12);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ivory);
+      color: var(--ink);
+      font-family: 'EB Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.85;
+      min-height: 100vh;
+    }
+
+    /* ── SITE NAV ── */
+    .site-nav {
+      padding: 1.1rem 4vw;
+      border-bottom: 1px solid var(--rule);
+      background: var(--ivory);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .site-nav a {
+      font-family: 'Inconsolata', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .site-nav a:hover { color: var(--rust); }
+    .site-nav .home { color: var(--sepia); }
+    .site-nav-links { display: flex; gap: 2rem; }
+
+    /* ── SECTION NAV ── */
+    .section-nav {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      background: var(--cream);
+      border-bottom: 1px solid var(--rule);
+      padding: 0 4vw;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .section-nav::-webkit-scrollbar { display: none; }
+
+    .section-nav-inner {
+      display: flex;
+      gap: 0;
+      white-space: nowrap;
+      min-width: max-content;
+    }
+
+    .section-nav a {
+      font-family: 'Inconsolata', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.7rem 1rem;
+      border-right: 1px solid var(--rule);
+      transition: color 0.2s, background 0.2s;
+      display: block;
+    }
+    .section-nav a:first-child { border-left: none; }
+    .section-nav a:hover { color: var(--rust); background: var(--ivory); }
+    .section-nav a.active { color: var(--rust); }
+
+    /* ── PAGE LAYOUT ── */
+    .page-wrap {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 4rem 4vw 6rem;
+    }
+
+    /* ── COVER BLOCK ── */
+    .cover-block {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 3.5rem;
+      align-items: start;
+      margin-bottom: 5rem;
+      padding-bottom: 4rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    @media (max-width: 640px) {
+      .cover-block {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .cover-img {
+        max-width: 240px;
+        margin: 0 auto;
+      }
+    }
+
+    .cover-img {
+      width: 100%;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px var(--shadow);
+    }
+    .cover-img img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      padding-top: 0.3rem;
+    }
+
+    .series-label {
+      font-family: 'Inconsolata', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      font-weight: 400;
+      line-height: 1.08;
+      color: var(--ink);
+    }
+
+    .book-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--sepia);
+    }
+
+    .presented-by {
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .divider {
+      width: 48px;
+      height: 1px;
+      background: var(--rule);
+    }
+
+    .intro-text {
+      font-size: 0.97rem;
+      color: var(--sepia);
+      line-height: 1.8;
+    }
+    .intro-text p + p { margin-top: 0.9rem; }
+
+    /* ── ESSAY SECTIONS ── */
+    .essay-section {
+      margin-bottom: 4.5rem;
+      scroll-margin-top: 5rem; /* clears sticky section-nav */
+    }
+
+    .essay-section h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+      line-height: 1.15;
+    }
+
+    .section-rule {
+      width: 40px;
+      height: 1px;
+      background: var(--gold);
+      margin-bottom: 1.8rem;
+    }
+
+    .prose p {
+      margin-bottom: 1.3em;
+      hyphens: auto;
+    }
+    .prose p:last-child { margin-bottom: 0; }
+
+    .prose em { font-style: italic; }
+    .prose strong { font-weight: 600; color: var(--sepia); }
+
+    /* Name list within Final Reflection */
+    .prose ul {
+      list-style: none;
+      margin: 1.2rem 0 1.2rem 1rem;
+    }
+    .prose ul li {
+      padding: 0.25rem 0;
+      color: var(--sepia);
+      font-size: 0.97rem;
+    }
+    .prose ul li::before {
+      content: '—';
+      margin-right: 0.6rem;
+      color: var(--rule);
+    }
+
+    /* Inline footnote superscripts */
+    .prose sup {
+      font-family: 'Inconsolata', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.02em;
+      vertical-align: super;
+      line-height: 0;
+    }
+    .prose sup a {
+      color: var(--gold);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .prose sup a:hover { color: var(--rust); }
+
+    /* Inline hyperlinks in prose */
+    .prose a {
+      color: var(--sepia);
+      text-decoration: underline;
+      text-decoration-color: var(--rule);
+      text-underline-offset: 2px;
+      transition: color 0.2s, text-decoration-color 0.2s;
+    }
+    .prose a:hover {
+      color: var(--rust);
+      text-decoration-color: var(--rust);
+    }
+
+    /* ── THE FINAL QUESTION ── */
+    .final-question-block {
+      margin: 5rem 0 4rem;
+      padding: 3rem 2rem 3.5rem;
+      border-top: 2px solid var(--rule);
+      border-bottom: 2px solid var(--rule);
+      text-align: center;
+      scroll-margin-top: 5rem;
+    }
+
+    .fq-label {
+      font-family: 'Inconsolata', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.8rem;
+      display: block;
+    }
+
+    .fq-question {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.4rem, 3.5vw, 2rem);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--ink);
+      line-height: 1.4;
+      margin-bottom: 1.5rem;
+    }
+
+    .fq-options {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-top: 1.2rem;
+    }
+
+    .fq-option {
+      font-family: 'Inconsolata', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--rust);
+      border: 1px solid var(--rust);
+      padding: 0.45rem 1.1rem;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+      cursor: default;
+    }
+    .fq-option:hover {
+      background: var(--rust);
+      color: var(--ivory);
+    }
+
+    .fq-note {
+      font-family: 'EB Garamond', serif;
+      font-size: 0.85rem;
+      font-style: italic;
+      color: var(--muted);
+      margin-top: 1.5rem;
+    }
+
+    /* ── ENDNOTES ── */
+    .endnotes-section {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--rule);
+      scroll-margin-top: 5rem;
+    }
+
+    .endnotes-section h2 {
+      font-family: 'Inconsolata', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .endnotes-section h2::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--rule);
+    }
+
+    .endnotes-list {
+      columns: 2;
+      column-gap: 2.5rem;
+      list-style: none;
+    }
+
+    @media (max-width: 560px) {
+      .endnotes-list { columns: 1; }
+    }
+
+    .endnotes-list li {
+      font-family: 'Inconsolata', monospace;
+      font-size: 0.72rem;
+      line-height: 1.55;
+      color: var(--muted);
+      padding: 0.3rem 0;
+      border-bottom: 1px solid rgba(212,200,176,0.4);
+      break-inside: avoid;
+      display: flex;
+      gap: 0.5rem;
+      align-items: baseline;
+    }
+
+    .endnotes-list li .en-num {
+      color: var(--gold);
+      min-width: 1.4rem;
+      flex-shrink: 0;
+      font-size: 0.65rem;
+    }
+
+    .endnotes-list li a {
+      color: var(--muted);
+      text-decoration: none;
+      word-break: break-all;
+      transition: color 0.2s;
+    }
+    .endnotes-list li a:hover { color: var(--rust); }
+
+    .en-return {
+      color: var(--rule);
+      margin-left: 0.3rem;
+      text-decoration: none;
+      font-size: 0.65rem;
+      transition: color 0.15s;
+    }
+    .en-return:hover { color: var(--rust); }
+
+    /* ── FOOTER ── */
+    .book-footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-family: 'Inconsolata', monospace;
+      font-size: 0.72rem;
+      color: var(--rule);
+      letter-spacing: 0.06em;
+    }
+    .book-footer a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .book-footer a:hover { color: var(--rust); }
+
+    /* ── FADE ── */
+    .fade-in { opacity: 0; transform: translateY(10px); animation: fadeUp 0.6s ease forwards; }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* ── SECTION NAV ACTIVE STATE (JS) ── */
+  </style>
+</head>
+<body>
+
+  <!-- SITE NAV -->
+  <nav class="site-nav">
+    <a href="https://andreas-breidenthal.github.io/" class="home">Andreas Breidenthal</a>
+    <div class="site-nav-links">
+      <a href="https://andreas-breidenthal.github.io/operation-seamless/">Operation Seamless</a>
+      <a href="https://github.com/andreas-breidenthal/repairing-the-gaps" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </nav>
+
+  <!-- SECTION NAV -->
+  <nav class="section-nav" aria-label="Page sections">
+    <div class="section-nav-inner">
+      <a href="#aldgate">The Aldgate Manuscript</a>
+      <a href="#seamless">Operation Seamless</a>
+      <a href="#analyses">The Analyses</a>
+      <a href="#memoir">Kerr's Memoir</a>
+      <a href="#postscript">The Postscript</a>
+      <a href="#final-analysis">The Final Analysis</a>
+      <a href="#reflection">Final Reflection</a>
+      <a href="#question">The Final Question</a>
+    </div>
+  </nav>
+
+  <div class="page-wrap">
+
+    <!-- COVER BLOCK -->
+    <div class="cover-block fade-in">
+      <div class="cover-img">
+        <img src="images/repairing-the-gaps-3_4.jpg" alt="Repairing the Gaps cover">
+      </div>
+      <div class="title-block">
+        <span class="series-label">A Companion to Operation Seamless</span>
+        <h1>Repairing the Gaps</h1>
+        <p class="book-subtitle">Notes on Building a Fictional Archive</p>
+        <p class="presented-by">Andreas Breidenthal</p>
+        <div class="divider"></div>
+        <div class="intro-text">
+          <p>This isn't a story. It's the architecture behind one.</p>
+          <p><em>Operation Seamless</em> was built to feel like a recovered archive — a fiction that could plausibly inhabit the gaps of the historical record. Every element was designed to stand alone yet contribute to a coherent whole.</p>
+          <p>The realism was intentional. The structure mimics the rhythm of archival discovery. The tone echoes the language of official recordkeeping. The details are anchored in real places, real people, and genuine historical silences.</p>
+          <p>What follows is not a set of rules, but a record of choices: the research that informed them, the structural logic that held them together, and the ethical questions that surfaced along the way.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 1: THE ALDGATE MANUSCRIPT -->
+    <section class="essay-section" id="aldgate">
+      <h2>Creating The Aldgate Manuscript</h2>
+      <div class="section-rule"></div>
+      <div class="prose">
+        <p>The project began as an experiment — a story-generation exercise using AI, with me steering the narrative. The early drafts were in third person, rich in psychological detail, but something felt wrong. If Jack the Ripper was never caught, then neither of the two policemen in the story could survive the encounter. That decision created a problem: if both officers died, who would tell the story?</p>
+        <p>The answer was a witness — but not one who could speak freely. It had to be someone whose testimony would never be trusted. A criminal. That single choice reshaped the entire narrative.</p>
+        <p>I rewrote the piece as a first-person testimony, stripped out the omniscience, and refined the voice through multiple passes until it felt plausible. At first, the manuscript was anonymous, its discovery location vague. Later, after Swift's cache emerged, I decided to name the author. I searched casebook.org for real residents of Butcher's Row in 1888 — someone young enough to scale walls, verifiably living at the right address, and without easily traceable descendants. That's how I found <a href="https://wiki.casebook.org/butchers%27_row_and_its_residents_-_people.html#Davies.2C_Thomas_Alexander" target="_blank" rel="noopener">Thomas Alexander Davies</a><sup id="endnote-ref-1"><a href="#endnote-1">[1]</a></sup> of <a href="https://wiki.casebook.org/butchers%27_row_and_its_residents_-_addresses.html#47_Aldgate_High_Street" target="_blank" rel="noopener">47 Aldgate High Street</a><sup id="endnote-ref-2"><a href="#endnote-2">[2]</a></sup>. <a href="https://maps.app.goo.gl/GELSnu5Cf7Dixs8P7" target="_blank" rel="noopener">The building still stands</a><sup id="endnote-ref-3"><a href="#endnote-3">[3]</a></sup>, and it has a basement — perfect for concealment.</p>
+        <p>The crime scene needed equal care. I wanted a name that carried weight, something atmospheric but real. I found it in <a href="https://www.theundergroundmap.com/article.html?id=102511" target="_blank" rel="noopener">Hand Alley</a><sup id="endnote-ref-4"><a href="#endnote-4">[4]</a></sup> — a name that felt almost too perfect for a story involving a severed hand. The alley had been renamed <a href="https://www.theundergroundmap.com/article.html?id=87663" target="_blank" rel="noopener">New Street</a><sup id="endnote-ref-5"><a href="#endnote-5">[5]</a></sup> in the late 18th century, but I solved that by having Davies note that locals still used the old name. <a href="https://alondoninheritance.com/londonpubs/pubs-city-london-july-2020-part-1/" target="_blank" rel="noopener">The Magpie public house</a><sup id="endnote-ref-6"><a href="#endnote-6">[6]</a></sup>, <a href="https://maps.app.goo.gl/9NgbwfhWUr28uTjC6" target="_blank" rel="noopener">which still exists</a><sup id="endnote-ref-7"><a href="#endnote-7">[7]</a></sup>, anchored the setting. <a href="https://maps.app.goo.gl/dF2dxNJkFskF7sGf8" target="_blank" rel="noopener">The alley provided the sharp bend</a><sup id="endnote-ref-8"><a href="#endnote-8">[8]</a></sup> I needed for concealment; <a href="https://alondoninheritance.com/wp-content/uploads/2020/07/City-of-London-Pubs-19.jpg" target="_blank" rel="noopener">the pub offered the ledge above its door</a><sup id="endnote-ref-9"><a href="#endnote-9">[9]</a></sup> — the perfect perch for a burglar poised to watch unseen.</p>
+        <p>The archivist's note came next. But the illusion was fragile: all the names I used initially were fictional, composites drawn from Ripper lore.</p>
+        <p>So I reworked them:</p>
+        <p><strong>Reeve</strong> — an old title for a law officer.<br>
+        <strong>Melrose</strong> — mellow, dependable (a name that suggests calm authority and quiet strength).<br>
+        <strong>Kerr</strong> — a cur (a name that suggests a skulking, savage, unwanted dog).<br>
+        <strong>Fenwick</strong> — plain, working-class.</p>
+        <p>Even then, the question remained: why had this event left no trace? The retired Chief Inspector Kerr with an ulterior motive fit perfectly. But someone else had to preserve the truth. That role fell to a child — a vagrant in <a href="https://www.theundergroundmap.com/article.html?id=24873" target="_blank" rel="noopener">Rose Alley</a><sup id="endnote-ref-10"><a href="#endnote-10">[10]</a></sup>, a real passage off Bishopsgate in 1888. Out of sight, but within earshot. And with that, the seed of <em>Operation Seamless</em> — and Swift's Account — was planted.</p>
+      </div>
+    </section>
+
+    <!-- SECTION 2: OPERATION SEAMLESS AND SWIFT'S CACHE -->
+    <section class="essay-section" id="seamless">
+      <h2>Creating Operation Seamless and Swift's Cache</h2>
+      <div class="section-rule"></div>
+      <div class="prose">
+        <p>The next step was to build the scaffolding for the larger narrative — the mechanism by which an event could vanish from history. That meant creating the documents that would have existed: the press coverage, the police report, the internal memoranda. From there, I began mapping Kerr's plan — the institutions he would need to infiltrate, the records he would have to retrieve, and the methods that would leave no trace of his intervention. A carte blanche letter from the Home Secretary became essential: a single sheet granting him unrestricted access, plausible yet discreet.</p>
+        <p>Then came a stroke of luck. While researching the City of London Police, I found a real constable dismissed in 1889: <a href="https://casebook.org/police_officials/po-james_harvey.html" target="_blank" rel="noopener">James Harvey</a><sup id="endnote-ref-11"><a href="#endnote-11">[11]</a></sup>. <a href="https://forum.casebook.org/forum/ripper-discussions/police-officials-and-procedures/harvey-p-c-james/658-questioning-pc-harveys-testimony/page14#post104181" target="_blank" rel="noopener">No reason recorded</a><sup id="endnote-ref-12"><a href="#endnote-12">[12]</a></sup>. Perfect. He became the officer who discovered the scene — and the man who had to be removed. But not abruptly. That would draw attention. So I had him undermined: his judgment questioned, his reports doubted, until dismissal felt inevitable. <a href="https://wiki.casebook.org/james_harvey.html#cite_note-6" target="_blank" rel="noopener">A later census placed him in West Ham, working in a warehouse</a><sup id="endnote-ref-13"><a href="#endnote-13">[13]</a></sup>. That was ideal — exactly the kind of quiet reassignment Kerr could arrange. <a href="https://wiki.casebook.org/james_harvey.html#cite_note-7" target="_blank" rel="noopener">Records showed he moved out around 1901</a><sup id="endnote-ref-14"><a href="#endnote-14">[14]</a></sup>, so I wove that into the story too.</p>
+        <p>Swift's Account needed a different texture — something Dickensian, a voice shaped by hardship and observation. I imagined it as a blend of <em>Oliver Twist</em> and <em>David Copperfield</em>. Swift needed someone to guide him through the labyrinth of clues — and for a time, Harvey filled that role, similar to Wemmick from Dickens' <em>Great Expectations</em>, but unlike Wemmick, Harvey did join Swift on some early ventures before stepping aside when the weight of the past became too much for him.</p>
+        <p>To find Kerr, Swift needed a thread. I decided Kerr had used an intermediary to write the letters that secured Harvey's warehouse post. If Swift could find those letters in the company archive, he could follow the trail. Meanwhile, Swift needed access to official records — somewhere he could search for the names tied to the incident and find nothing. I placed him at the General Register Office, where the silence of the ledgers would speak louder than any entry.</p>
+        <p>The misheard name — "Jay Thompson Rivers" — became a device. It gave Swift a phantom to chase, a ghost that would lead him back to Harvey and, eventually, to Kerr. The real name, James Thomas Reeve, had been erased.</p>
+        <p>For the intermediary, I chose <a href="https://wiki.casebook.org/thomas_bond.html" target="_blank" rel="noopener">Dr Thomas Bond</a><sup id="endnote-ref-15"><a href="#endnote-15">[15]</a></sup>, a real police surgeon. When I discovered <a href="https://en.m.wikipedia.org/wiki/Thomas_Bond_%28British_surgeon%29#Later_years" target="_blank" rel="noopener">his suicide in June 1901</a><sup id="endnote-ref-16"><a href="#endnote-16">[16]</a></sup>, I folded it into the story. I researched his address, the household, the final days. Each detail added weight.</p>
+        <p>Finally, Kerr needed a refuge — somewhere outside London, but close enough to reach by train. I chose Chigwell. <a href="https://www.lostheritage.org.uk/houses/lh_essex_rollspark_info_gallery.html" target="_blank" rel="noopener">Rolls House</a><sup id="endnote-ref-17"><a href="#endnote-17">[17]</a></sup>, on the Barringtons Estate, was perfect: <a href="https://gw.geneanet.org/rnelson?lang=en&n=harvey&oc=2&p=eliab" target="_blank" rel="noopener">no recorded occupants between 1883 and 1914</a><sup id="endnote-ref-18"><a href="#endnote-18">[18]</a></sup>, demolished in 1953. <a href="https://www.findmypast.co.uk/transcript?id=GBC%2F1881%2F0008094806&tab=this" target="_blank" rel="noopener">Edward Ball was recorded as living there in 1881</a><sup id="endnote-ref-19"><a href="#endnote-19">[19]</a></sup>. The estate itself belonged to <a href="https://www2.gurdon.cam.ac.uk/hempstead-essex/Letters%20from%20the%20Harvey%20family.pdf" target="_blank" rel="noopener">Richard Lloyd</a><sup id="endnote-ref-20"><a href="#endnote-20">[20]</a></sup>, who resided at Aston Hall and never occupied Rolls House. Later, his son Sir Francis Lloyd inherited the estate but did not move in until 1914. These details gave me the perfect gap — a house without a resident for decades — and names I could use to anchor the fiction. Even Dickens helped: Rolls House had inspired The Warren in <em>Barnaby Rudge</em>, giving me a vocabulary of space and shadow.</p>
+        <p>Upon discovering that the <a href="https://en.m.wikipedia.org/wiki/Chigwell_tube_station#History" target="_blank" rel="noopener">Chigwell train station didn't open until 1903</a><sup id="endnote-ref-21"><a href="#endnote-21">[21]</a></sup>, I needed to have Swift (and subsequently Kerr) use <a href="https://en.m.wikipedia.org/wiki/Woodford_tube_station#History" target="_blank" rel="noopener">Woodford Station</a><sup id="endnote-ref-22"><a href="#endnote-22">[22]</a></sup>, and walk between Rolls House and Woodford Station.</p>
+        <p>With Swift's Account complete and the cache assembled, I wrote the archivist's notes. At first, they read like commentary. Later, I refined them into the clipped, procedural tone of institutional cataloguing.</p>
+      </div>
+    </section>
+
+    <!-- SECTION 3: THE ANALYSES -->
+    <section class="essay-section" id="analyses">
+      <h2>Creating the Historian's Analyses</h2>
+      <div class="section-rule"></div>
+      <div class="prose">
+        <p>The narrative needed more than voices from the past; it needed interpretation — the cool, forensic tone of scholarship to frame the recovered documents. That's where the historians came in.</p>
+        <p>I began with Charlotte Sablier. Her name was deliberate: "Sablier" is French for hourglass — a quiet nod to time and its erosion of certainty. Her role was to examine <em>The Aldgate Manuscript</em> with the tools of palaeography and archival method. I made sure the anomalies in Davies' account — the unverifiable names, the absence of corroborating records — were left unresolved at this stage. Enough to cast doubt, but not enough to dismiss. Her analysis had to feel authentic: cautious, precise, and grounded in the language of academic scepticism.</p>
+        <p>To balance her voice, I introduced Dr Felix Marlowe, Senior Researcher in Urban Memory and Archival Recovery. Where Sablier was measured, Marlowe could be expansive. His task was to assess Swift's Account and the cache independently, without reference to Davies. This allowed me to present a detailed breakdown of the cache's internal logic, its material plausibility, and the institutional structures it invoked. Every observation had to feel earned — the kind of insight that comes from long hours in a reading room, not from the imagination of a novelist.</p>
+        <p>Finally, Sablier returned for a second paper — this time comparing both manuscripts. Now the pieces could interlock. The anomalies in <em>The Aldgate Manuscript</em> found their explanation in Operation Seamless. But one question remained: why had Swift, who claimed he would submit the cache to the authorities, never done so? That silence became the hinge on which the next phase of the story would turn.</p>
+        <p>It was time to write Kerr's memoir.</p>
+      </div>
+    </section>
+
+    <!-- SECTION 4: KERR'S MEMOIR -->
+    <section class="essay-section" id="memoir">
+      <h2>Creating Kerr's Memoir</h2>
+      <div class="section-rule"></div>
+      <div class="prose">
+        <p>By the time I began writing Kerr's memoir, most of the architecture was already in place. The structure of Operation Seamless had been mapped during the development of Swift's Account; the logic of erasure was clear. What remained was to give it a voice — calm, methodical, and steeped in the quiet conviction of a man who believes his choices were necessary.</p>
+        <p>But something unexpected happened along the way: my own perception of Kerr shifted. In <em>The Aldgate Manuscript</em>, he was a cur — a name chosen to suggest something low and dangerous. In Swift's Account, he softened into a shrewd operator, ruthless but not monstrous. By the time I reached the memoir, I found myself wondering if he was neither villain nor schemer, but a loyal martyr — a man who sacrificed his identity to protect the force and the men he admired.</p>
+        <p>That realisation unsettled me. It blurred the line between invention and discovery. I even considered changing his name to something less harsh, as though the word itself had become unfair. In the end, I kept it, but the man behind it had altered beyond recognition. And in that moment, I understood something about the depth of this project: I no longer knew with certainty what my own characters were. Perhaps they weren't mine at all. Perhaps they were real.</p>
+        <p>This reframing set the tone of the memoir. Kerr does not confess to murder. He confesses to silence. He explains the operation, the rationale, the cost. His voice is steady, almost judicial — no flourish, no plea for sympathy. Just the logic of a man who chose erasure over exposure and lived long enough to wonder whether the wound he stitched shut was ever truly closed.</p>
+        <p>To ground the memoir in reality, I threaded in historical detail. <a href="https://british-police-history.uk/f/city-of-london-officers" target="_blank" rel="noopener">George Palmer</a><sup id="endnote-ref-23"><a href="#endnote-23">[23]</a></sup>, a real officer in the City of London Police, provided a useful gap. He was promoted from Sergeant to Inspector in 1888 and later to Chief Inspector in 1892. I imagined that Palmer's promotions could have been fudged by Kerr to obscure the seam — a quiet act of bureaucratic stitching, never stated outright in the book but always implied in my mind.</p>
+        <p>James Harvey's unexplained dismissal became another anchor. Rolls House, with its decades of silence between occupants, gave Kerr a plausible refuge. I added Richard Lloyd as the estate owner and Edward Ball as the last recorded resident before the void. These names, drawn from the record, lent the memoir its texture of truth.</p>
+        <p>Finally, I tied Kerr to <a href="https://en.m.wikipedia.org/wiki/Henry_Matthews,_1st_Viscount_Llandaff" target="_blank" rel="noopener">Henry Matthews</a><sup id="endnote-ref-24"><a href="#endnote-24">[24]</a></sup>, the Home Secretary. Their friendship explained the carte blanche letter — a single page of authority that opened every archive door. <a href="https://en.m.wikipedia.org/wiki/Henry_Matthews,_1st_Viscount_Llandaff#Political_career" target="_blank" rel="noopener">Matthews' re-election and appointment were real</a><sup id="endnote-ref-25"><a href="#endnote-25">[25]</a></sup>; the trust he placed in Kerr was imagined, but believable.</p>
+        <p>In Chapter 12 of the memoir, I even managed to tie in quite a string of <a href="https://www.casebook.org/timeline.html" target="_blank" rel="noopener">Ripper-related dates</a><sup id="endnote-ref-26"><a href="#endnote-26">[26]</a></sup>, even having Kerr claiming to have written the <a href="https://www.casebook.org/ripper_letters/" target="_blank" rel="noopener">"Dear Boss" letter</a><sup id="endnote-ref-27"><a href="#endnote-27">[27]</a></sup>.</p>
+        <p>The memoir became the quiet heart of the project — not a confession, but a justification. And perhaps, in its own way, a lament.</p>
+      </div>
+    </section>
+
+    <!-- SECTION 5: THE POSTSCRIPT -->
+    <section class="essay-section" id="postscript">
+      <h2>Creating Kerr's Postscript</h2>
+      <div class="section-rule"></div>
+      <div class="prose">
+        <p>The postscript was the hardest piece to write. It had to explain why Swift's cache remained untouched for more than a century — despite Kerr's awareness of Swift and his involvement in the operation. That question lingered like a loose thread: if Kerr knew, why didn't he retrieve the documents?</p>
+        <p>I began by mapping the timeline:</p>
+        <p>Dr Bond's suicide in June 1901. Harvey's move from Tower Hamlets Road soon after. Swift's move into the same house, followed by his vigil at Rolls House. The breach of Kerr's study and the theft of nine documents.</p>
+        <p>From there, the logic unfolded. Kerr discovers the breach. He inspects the study, notes what's missing, and begins reasoning through who could have known of his existence. Two possibilities emerge: James Harvey or the child witness. Since he never saw the child, Harvey becomes his first lead.</p>
+        <p>I needed to allow a few days for Swift to finish his account, so I had Kerr search out Harvey's old address, not knowing that Harvey had recently moved. Then he spent a while longer watching the house, realising it wasn't Harvey living there — a detail that prevented him from intervening immediately. That delay also gave Kerr time to toy with the idea that this might be the child witness Harvey had found the morning after the incident — now grown, living quietly in the same house. It's a stretch, but plausible for a man of Kerr's deductive instincts.</p>
+        <p>The next problem: why doesn't Kerr simply enter the house and retrieve the cache? Because if he did, the documents would not have survived. So I had to keep him outside. He meets Swift in the street instead, masking his intent behind a performance of eccentric chatter — a tactic to disarm suspicion. During the exchange, Kerr subtly uncovered Swift's identity as the child witness before slowly revealing his own identity, all the while reassuring him that he meant no harm. Finally, Swift agrees to travel to Chigwell with him.</p>
+        <p>At Rolls House, Swift reads Kerr's completed memoir. This allowed me to let Swift uncover Kerr's full story without needing pages of dialogue. Swift agrees to help destroy the archive — explaining why no more of it has ever been found.</p>
+        <p>But Swift's account ends with his intention to submit the cache to the authorities the next day. Since it remained hidden, two things are clear: Swift never returned to the house. Kerr never had the opportunity to search for the missing documents.</p>
+        <p>That left me with one final problem: how to meet both these criteria without breaking plausibility. Swift had to disappear from the narrative without ever retrieving the cache, and Kerr had to remain unable to recover it — despite being close enough to try.</p>
+        <p>If Kerr killed Swift, he would still have time to retrieve the cache. If Swift betrayed Kerr, the memoir would never exist. Neither option worked. Both scenarios collapsed under their own weight.</p>
+        <p>The only solution was symmetry: a single event that removed Swift and left Kerr unable to act long enough for the balance to shift. Swift is gone (<a href="https://ezitis.myzen.co.uk/woodfordjubilee.html" target="_blank" rel="noopener">yes, I did find a hospital to put him in first</a><sup id="endnote-ref-28"><a href="#endnote-28">[28]</a></sup>). Kerr is incapacitated for weeks — enough time for the house to be reoccupied. When he finally recovers, the chance has passed. There is no plausible way to gain entry, no reason he can offer without exposing everything. Time moves on. The hiding place remains undisturbed.</p>
+        <p>That brought the postscript to a close — and explained why the cache survived.</p>
+        <p>I just had to find a place for Kerr to stash his memoir, since Rolls House was demolished in 1953. As luck would have it, <a href="https://assets.savills.com/properties/GBHTRSLUS180200/LUS180200_LUS19002086.PDF" target="_blank" rel="noopener">the original stables are still standing</a><sup id="endnote-ref-29"><a href="#endnote-29">[29]</a></sup>, and have been converted into a dwelling — so there we had our hiding place for the memoir.</p>
+      </div>
+    </section>
+
+    <!-- SECTION 6: THE FINAL ANALYSIS -->
+    <section class="essay-section" id="final-analysis">
+      <h2>Creating the Final Analysis</h2>
+      <div class="section-rule"></div>
+      <div class="prose">
+        <p>At first, I thought the final analysis — comparing all three manuscripts — would be straightforward. My plan was to treat Kerr's memoir as truthful, which would cast Davies as the fabricator — and possibly the real perpetrator of the original crime — positioning Operation Seamless as a necessary act of containment.</p>
+        <p>But when I reached the interpretation stage, the silence around Swift became impossible to ignore. His complete absence from historical records — a man who worked at Somerset House, with access to the machinery of registration — made that conclusion harder to sustain. If Kerr's memoir was accurate, why would Swift leave no trace at all?</p>
+        <p>That question shifted the balance. It pushed the narrative toward a second, more plausible reading: Kerr as the manipulator, and Davies as the reluctant witness.</p>
+        <p>So I revised the analysis to allow for both interpretations:</p>
+        <p>One where Kerr is a loyal martyr, and Davies a fabricator — perhaps even a murderer. One where Kerr is a scheming killer, and Davies a man who stumbled too close to the truth.</p>
+        <p>By the end, the second scenario felt more grounded. It explained the erasures, the silences, and the survival of Swift's cache. It also allowed Kerr's postscript to be read not as a confession, but as a final act of control — an attempt to close the narrative on his own terms, even as Swift's silence left the story unresolved.</p>
+        <p>That ambiguity wasn't deliberate — in fact, it bothered me at first — but I chose to leave it as part of the structure. It seemed to belong to the story. And since Kerr was fictional, it seemed fitting that he ended up the villain — at least on paper. All the real people I drew into the story — Davies, Harvey, Bond, Ball, Lloyd, Matthews, Palmer — exited clean. None of them were tarnished, except in the sense that Davies was cast as a thief throughout — and, for a moment, something worse. (Sorry Tom, I'm sure you were a great guy!)</p>
+      </div>
+    </section>
+
+    <!-- SECTION 7: FINAL REFLECTION -->
+    <section class="essay-section" id="reflection">
+      <h2>Final Reflection</h2>
+      <div class="section-rule"></div>
+      <div class="prose">
+        <p>This project began as a game — a creative exercise in storytelling. But it became something more: a layered, immersive narrative built on real places, real absences, and the quiet plausibility of forgotten truths.</p>
+        <p>Every part of <em>Operation Seamless</em> was constructed with care — not to trick, but to evoke. The goal was never to convince, but to invite. To ask how history is shaped, and how silence can be made to speak.</p>
+        <p>Some of the characters were fictional. Others were drawn from historical record — some obscure, some well-known — chosen because they offered just enough factual grounding to anchor the story in reality. The gaps they inhabited were real. And within those gaps, the fiction found its voice.</p>
+        <p>So, to any living descendants of the following individuals — congratulations. You have a great ancestor who fitted into my story so well.</p>
+        <ul>
+          <li><a href="https://wiki.casebook.org/butchers%27_row_and_its_residents_-_people.html#Davies.2C_Thomas_Alexander" target="_blank" rel="noopener">Thomas Alexander Davies (1851–1924)</a><sup id="endnote-ref-30"><a href="#endnote-30">[30]</a></sup></li>
+          <li><a href="https://wiki.casebook.org/james_harvey.html" target="_blank" rel="noopener">Police Constable James Harvey, 964 (City), (1855–1903)</a><sup id="endnote-ref-31"><a href="#endnote-31">[31]</a></sup></li>
+          <li><a href="https://en.m.wikipedia.org/wiki/Thomas_Bond_%28British_surgeon%29" target="_blank" rel="noopener">Dr Thomas Bond FRCS, MB BS (London), (1841–1901)</a><sup id="endnote-ref-32"><a href="#endnote-32">[32]</a></sup></li>
+          <li><a href="https://www.findmypast.co.uk/transcript?id=GBC%2F1881%2F0008094806&tab=this" target="_blank" rel="noopener">Edward Ball of Rolls Park, Chigwell</a><sup id="endnote-ref-33"><a href="#endnote-33">[33]</a></sup></li>
+          <li><a href="https://www2.gurdon.cam.ac.uk/hempstead-essex/Letters%20from%20the%20Harvey%20family.pdf" target="_blank" rel="noopener">Col. Richard Thomas Lloyd of Aston Hall (1820–1898)</a><sup id="endnote-ref-34"><a href="#endnote-34">[34]</a></sup></li>
+          <li><a href="https://en.m.wikipedia.org/wiki/Henry_Matthews,_1st_Viscount_Llandaff" target="_blank" rel="noopener">Henry Matthews, 1st Viscount Llandaff, PC, KC (1826–1913)</a><sup id="endnote-ref-35"><a href="#endnote-35">[35]</a></sup></li>
+          <li><a href="https://british-police-history.uk/f/city-of-london-officers" target="_blank" rel="noopener">George Palmer, Chief Inspector, City of London Police</a><sup id="endnote-ref-36"><a href="#endnote-36">[36]</a></sup></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- THE FINAL QUESTION -->
+    <div class="final-question-block" id="question">
+      <span class="fq-label">The Final Question</span>
+      <p class="fq-question">Which do you now believe?</p>
+      <p class="fq-question" style="font-size: clamp(1rem, 2.5vw, 1.3rem); margin-top: 0.6rem; color: var(--sepia);">Operation Seamless or Repairing the Gaps?</p>
+    </div>
+
+    <!-- ENDNOTES -->
+    <section class="endnotes-section" id="endnotes">
+      <h2>Endnotes</h2>
+      <ol class="endnotes-list">
+        <li id="endnote-1"><span class="en-num">1</span><a href="https://wiki.casebook.org/butchers%27_row_and_its_residents_-_people.html#Davies.2C_Thomas_Alexander" target="_blank" rel="noopener">wiki.casebook.org — Thomas Alexander Davies</a><a href="#endnote-ref-1" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-2"><span class="en-num">2</span><a href="https://wiki.casebook.org/butchers%27_row_and_its_residents_-_addresses.html#47_Aldgate_High_Street" target="_blank" rel="noopener">wiki.casebook.org — 47 Aldgate High Street</a><a href="#endnote-ref-2" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-3"><span class="en-num">3</span><a href="https://maps.app.goo.gl/GELSnu5Cf7Dixs8P7" target="_blank" rel="noopener">Google Maps — 47 Aldgate High Street</a><a href="#endnote-ref-3" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-4"><span class="en-num">4</span><a href="https://www.theundergroundmap.com/article.html?id=102511" target="_blank" rel="noopener">theundergroundmap.com — Hand Alley</a><a href="#endnote-ref-4" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-5"><span class="en-num">5</span><a href="https://www.theundergroundmap.com/article.html?id=87663" target="_blank" rel="noopener">theundergroundmap.com — New Street</a><a href="#endnote-ref-5" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-6"><span class="en-num">6</span><a href="https://alondoninheritance.com/londonpubs/pubs-city-london-july-2020-part-1/" target="_blank" rel="noopener">alondoninheritance.com — The Magpie</a><a href="#endnote-ref-6" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-7"><span class="en-num">7</span><a href="https://maps.app.goo.gl/9NgbwfhWUr28uTjC6" target="_blank" rel="noopener">Google Maps — The Magpie pub</a><a href="#endnote-ref-7" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-8"><span class="en-num">8</span><a href="https://maps.app.goo.gl/dF2dxNJkFskF7sGf8" target="_blank" rel="noopener">Google Maps — Hand Alley bend</a><a href="#endnote-ref-8" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-9"><span class="en-num">9</span><a href="https://alondoninheritance.com/wp-content/uploads/2020/07/City-of-London-Pubs-19.jpg" target="_blank" rel="noopener">alondoninheritance.com — Magpie ledge photograph</a><a href="#endnote-ref-9" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-10"><span class="en-num">10</span><a href="https://www.theundergroundmap.com/article.html?id=24873" target="_blank" rel="noopener">theundergroundmap.com — Rose Alley</a><a href="#endnote-ref-10" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-11"><span class="en-num">11</span><a href="https://casebook.org/police_officials/po-james_harvey.html" target="_blank" rel="noopener">casebook.org — James Harvey</a><a href="#endnote-ref-11" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-12"><span class="en-num">12</span><a href="https://forum.casebook.org/forum/ripper-discussions/police-officials-and-procedures/harvey-p-c-james/658-questioning-pc-harveys-testimony/page14#post104181" target="_blank" rel="noopener">casebook.org forum — Harvey dismissal discussion</a><a href="#endnote-ref-12" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-13"><span class="en-num">13</span><a href="https://wiki.casebook.org/james_harvey.html#cite_note-6" target="_blank" rel="noopener">wiki.casebook.org — Harvey census record</a><a href="#endnote-ref-13" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-14"><span class="en-num">14</span><a href="https://wiki.casebook.org/james_harvey.html#cite_note-7" target="_blank" rel="noopener">wiki.casebook.org — Harvey move date</a><a href="#endnote-ref-14" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-15"><span class="en-num">15</span><a href="https://wiki.casebook.org/thomas_bond.html" target="_blank" rel="noopener">wiki.casebook.org — Dr Thomas Bond</a><a href="#endnote-ref-15" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-16"><span class="en-num">16</span><a href="https://en.m.wikipedia.org/wiki/Thomas_Bond_%28British_surgeon%29#Later_years" target="_blank" rel="noopener">Wikipedia — Thomas Bond, later years</a><a href="#endnote-ref-16" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-17"><span class="en-num">17</span><a href="https://www.lostheritage.org.uk/houses/lh_essex_rollspark_info_gallery.html" target="_blank" rel="noopener">lostheritage.org.uk — Rolls House</a><a href="#endnote-ref-17" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-18"><span class="en-num">18</span><a href="https://gw.geneanet.org/rnelson?lang=en&n=harvey&oc=2&p=eliab" target="_blank" rel="noopener">geneanet.org — Rolls House occupancy gap</a><a href="#endnote-ref-18" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-19"><span class="en-num">19</span><a href="https://www.findmypast.co.uk/transcript?id=GBC%2F1881%2F0008094806&tab=this" target="_blank" rel="noopener">findmypast.co.uk — Edward Ball, 1881 census</a><a href="#endnote-ref-19" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-20"><span class="en-num">20</span><a href="https://www2.gurdon.cam.ac.uk/hempstead-essex/Letters%20from%20the%20Harvey%20family.pdf" target="_blank" rel="noopener">gurdon.cam.ac.uk — Richard Lloyd, Harvey letters</a><a href="#endnote-ref-20" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-21"><span class="en-num">21</span><a href="https://en.m.wikipedia.org/wiki/Chigwell_tube_station#History" target="_blank" rel="noopener">Wikipedia — Chigwell station history</a><a href="#endnote-ref-21" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-22"><span class="en-num">22</span><a href="https://en.m.wikipedia.org/wiki/Woodford_tube_station#History" target="_blank" rel="noopener">Wikipedia — Woodford station history</a><a href="#endnote-ref-22" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-23"><span class="en-num">23</span><a href="https://british-police-history.uk/f/city-of-london-officers" target="_blank" rel="noopener">british-police-history.uk — City of London officers</a><a href="#endnote-ref-23" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-24"><span class="en-num">24</span><a href="https://en.m.wikipedia.org/wiki/Henry_Matthews,_1st_Viscount_Llandaff" target="_blank" rel="noopener">Wikipedia — Henry Matthews</a><a href="#endnote-ref-24" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-25"><span class="en-num">25</span><a href="https://en.m.wikipedia.org/wiki/Henry_Matthews,_1st_Viscount_Llandaff#Political_career" target="_blank" rel="noopener">Wikipedia — Matthews, political career</a><a href="#endnote-ref-25" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-26"><span class="en-num">26</span><a href="https://www.casebook.org/timeline.html" target="_blank" rel="noopener">casebook.org — Ripper timeline</a><a href="#endnote-ref-26" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-27"><span class="en-num">27</span><a href="https://www.casebook.org/ripper_letters/" target="_blank" rel="noopener">casebook.org — Ripper letters</a><a href="#endnote-ref-27" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-28"><span class="en-num">28</span><a href="https://ezitis.myzen.co.uk/woodfordjubilee.html" target="_blank" rel="noopener">ezitis.myzen.co.uk — Woodford hospital</a><a href="#endnote-ref-28" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-29"><span class="en-num">29</span><a href="https://assets.savills.com/properties/GBHTRSLUS180200/LUS180200_LUS19002086.PDF" target="_blank" rel="noopener">savills.com — Rolls House stables</a><a href="#endnote-ref-29" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-30"><span class="en-num">30</span><a href="https://wiki.casebook.org/butchers%27_row_and_its_residents_-_people.html#Davies.2C_Thomas_Alexander" target="_blank" rel="noopener">wiki.casebook.org — Thomas Alexander Davies</a><a href="#endnote-ref-30" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-31"><span class="en-num">31</span><a href="https://wiki.casebook.org/james_harvey.html" target="_blank" rel="noopener">wiki.casebook.org — James Harvey</a><a href="#endnote-ref-31" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-32"><span class="en-num">32</span><a href="https://en.m.wikipedia.org/wiki/Thomas_Bond_%28British_surgeon%29" target="_blank" rel="noopener">Wikipedia — Thomas Bond</a><a href="#endnote-ref-32" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-33"><span class="en-num">33</span><a href="https://www.findmypast.co.uk/transcript?id=GBC%2F1881%2F0008094806&tab=this" target="_blank" rel="noopener">findmypast.co.uk — Edward Ball</a><a href="#endnote-ref-33" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-34"><span class="en-num">34</span><a href="https://www2.gurdon.cam.ac.uk/hempstead-essex/Letters%20from%20the%20Harvey%20family.pdf" target="_blank" rel="noopener">gurdon.cam.ac.uk — Col. Richard Lloyd</a><a href="#endnote-ref-34" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-35"><span class="en-num">35</span><a href="https://en.m.wikipedia.org/wiki/Henry_Matthews,_1st_Viscount_Llandaff" target="_blank" rel="noopener">Wikipedia — Henry Matthews</a><a href="#endnote-ref-35" class="en-return" title="Return">↑</a></li>
+        <li id="endnote-36"><span class="en-num">36</span><a href="https://british-police-history.uk/f/city-of-london-officers" target="_blank" rel="noopener">british-police-history.uk — George Palmer</a><a href="#endnote-ref-36" class="en-return" title="Return">↑</a></li>
+      </ol>
+    </section>
+
+    <!-- FOOTER -->
+    <div class="book-footer">
+      <span>CC0 Public Domain · Andreas Breidenthal</span>
+      <span>
+        <a href="https://github.com/andreas-breidenthal/repairing-the-gaps" target="_blank" rel="noopener">View on GitHub</a>
+        &nbsp;·&nbsp;
+        <a href="https://andreas-breidenthal.github.io/">Return to Archive</a>
+      </span>
+    </div>
+
+  </div><!-- /page-wrap -->
+
+  <script>
+    // Highlight active section in sticky nav as user scrolls
+    const sections = document.querySelectorAll('.essay-section, .final-question-block');
+    const navLinks = document.querySelectorAll('.section-nav a');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => link.classList.remove('active'));
+          const id = entry.target.id;
+          const active = document.querySelector(`.section-nav a[href="#${id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+
+</body>
+</html>
