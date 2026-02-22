@@ -212,7 +212,6 @@
     .prose p {
       margin-bottom: 1.3em;
       hyphens: auto;
-      scroll-margin-top: 5rem;
     }
     .prose p:last-child { margin-bottom: 0; }
 
@@ -363,7 +362,6 @@
     }
 
     .endnotes-list li {
-      scroll-margin-top: 5rem;
       font-family: 'Inconsolata', monospace;
       font-size: 0.72rem;
       line-height: 1.55;
@@ -426,7 +424,13 @@
     .fade-in { opacity: 0; transform: translateY(10px); animation: fadeUp 0.6s ease forwards; }
     @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
 
-    /* ── SECTION NAV ACTIVE STATE (JS) ── */
+    /* Offset for sticky nav on anchor jump targets */
+    .prose sup[id] {
+      scroll-margin-top: 6rem;
+    }
+    .endnotes-list li[id] {
+      scroll-margin-top: 5rem;
+    }
   </style>
 </head>
 <body>
