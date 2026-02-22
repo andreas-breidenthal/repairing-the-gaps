@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function () {
         <a href="/../andreas-breidenthal/index.html" class="home">Andreas Breidenthal</a>
         <div class="site-nav-links">
           <a href="https://andreas-breidenthal.github.io/operation-seamless/">Operation Seamless</a>
-          <a href="https://github.com/andreas-breidenthal/repairing-the-gaps" target="_blank" rel="noopener">GitHub</a>
         </div>
       </nav>
     `;
