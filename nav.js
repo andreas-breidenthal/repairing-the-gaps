@@ -8,13 +8,17 @@ document.addEventListener('DOMContentLoaded', function () {
   if (siteNav) {
     siteNav.innerHTML = `
       <nav class="site-nav">
-        <a href="/../andreas-breidenthal/index.html" class="home">Andreas Breidenthal</a>
+        <a href="https://andreas-breidenthal.github.io/andreas-breidenthal/" class="home">Andreas Breidenthal</a>
         <div class="site-nav-links">
           <a href="https://andreas-breidenthal.github.io/operation-seamless/">Operation Seamless</a>
         </div>
       </nav>
     `;
   }
+
+    const footer = document.createElement('script');
+    footer.src = 'https://andreas-breidenthal.github.io/andreas-breidenthal/universal-footer.js';
+    document.body.appendChild(footer);
 
   // ── SECTION NAV ACTIVE STATE ───────────────────────────
   const sections = document.querySelectorAll('.essay-section, .final-question-block');
