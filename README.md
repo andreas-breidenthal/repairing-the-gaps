@@ -1,4 +1,8 @@
-Repairing the Gaps cover
+
+
+
+
+![Repairing the Gaps cover](images/repairing-the-gaps-cover.webp)
 
 `A Companion to Operation Seamless`
 
@@ -18,3 +22,4 @@ The realism was intentional. The structure mimics the rhythm of archival discove
 
 What follows is not a set of rules, but a record of choices: the research that informed them, the structural logic that held them together, and the ethical questions that surfaced along the way.
 
+[Begin reading →](https://andreas-breidenthal.github.io/repairing-the-gaps/index.html)
