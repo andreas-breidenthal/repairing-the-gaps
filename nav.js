@@ -16,9 +16,9 @@ document.addEventListener('DOMContentLoaded', function () {
     `;
   }
 
-    const footer = document.createElement('script');
-    footer.src = 'https://andreas-breidenthal.github.io/andreas-breidenthal/universal-footer.js';
-    document.body.appendChild(footer);
+  const footer = document.createElement('script');
+  footer.src = 'https://andreas-breidenthal.github.io/andreas-breidenthal/universal-footer.js';
+  document.body.appendChild(footer);
 
   // ── SECTION NAV ACTIVE STATE ───────────────────────────
   const sections = document.querySelectorAll('.essay-section, .final-question-block');
